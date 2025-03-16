@@ -1,14 +1,16 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-
+import Markdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
 // Define TypeScript types for our messages
 type Role = 'user' | 'assistant';
 
-interface Message {
+type Message = {
   role: Role;
   content: string;
-}
+};
 
 export default function ChatInterface() {
   // State for storing messages and user input
@@ -74,6 +76,8 @@ export default function ChatInterface() {
     }
   };
 
+  console.log(messages);
+
   return (
     <div className="flex flex-col h-[80vh] max-w-3xl mx-auto border rounded-lg overflow-hidden bg-white dark:bg-gray-800">
       {/* Chat header */}
@@ -106,7 +110,12 @@ export default function ChatInterface() {
                     : 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white rounded-bl-none'
                 }`}
               >
-                {message.content}
+                <Markdown
+                  remarkPlugins={[remarkGfm]}
+                  rehypePlugins={[rehypeRaw]}
+                >
+                  {message.content}
+                </Markdown>
               </div>
             </div>
           ))
